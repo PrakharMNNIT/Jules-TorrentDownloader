@@ -5,6 +5,7 @@ import { useStore } from "@/lib/store";
 import { PhaseCard } from "@/components/PhaseCard";
 import { WeeklyBattlePlan } from "@/components/WeeklyBattlePlan";
 import { BadDayModal } from "@/components/BadDayModal";
+import { TaskDetailModal } from "@/components/TaskDetailModal";
 import { Rocket, Terminal, Code2, FileCode2, Box, AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -33,6 +34,35 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="hidden md:flex flex-1 justify-end gap-8 items-center">
+
+          {/* Gamification Stats */}
+          <div className="flex items-center gap-6 mr-4">
+             {/* XP */}
+             <div className="flex flex-col items-end">
+                <span className="text-[10px] font-mono text-primary uppercase tracking-wider">Level {userStats.level}</span>
+                <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-white">{userStats.xp.toLocaleString()} XP</span>
+                    <div className="w-24 h-1.5 bg-[#282e39] rounded-full overflow-hidden">
+                        <div className="h-full bg-primary w-[70%]" />
+                    </div>
+                </div>
+             </div>
+
+             {/* Streak */}
+             <div className="flex items-center gap-2 bg-orange-500/10 px-3 py-1.5 rounded-lg border border-orange-500/20">
+                <span className="text-orange-500 font-bold text-sm">{userStats.streak}</span>
+                <span className="text-[10px] text-orange-400 font-mono uppercase">Days</span>
+                <div className="relative">
+                    <div className="absolute inset-0 bg-orange-500 blur-sm opacity-50 animate-pulse" />
+                    <svg className="w-4 h-4 text-orange-500 relative z-10 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2C9.5 5 7 7.5 7 10.5C7 13.5 9.24 16 12 16C14.76 16 17 13.5 17 10.5C17 7.5 14.5 5 12 2ZM12 22C7.5 22 4 18.5 4 14C4 10 7 6 7 6C7 6 6 8.5 6 10C6 13 8 15 10 16C8 17 8 18 9 19C10.5 20.5 13 21 15 19C15 19 14 18 14 17C14 15 17 13 17 10C17 10 20 14 20 18C20 20.2 18.2 22 16 22H12Z"/>
+                    </svg>
+                </div>
+             </div>
+          </div>
+
+          <div className="h-8 w-px bg-[#282e39]" />
+
           <nav className="flex items-center gap-1 bg-[#1b212d] p-1 rounded-lg border border-[#282e39]">
             <a className="text-white text-sm font-medium leading-normal px-4 py-2 rounded bg-primary/20 text-primary" href="#">Dashboard</a>
             <a className="text-[#9ca6ba] hover:text-white text-sm font-medium leading-normal px-4 py-2 rounded hover:bg-[#282e39] transition-colors" href="#">Missions</a>
@@ -149,6 +179,7 @@ export default function Dashboard() {
 
       {/* Global Modals */}
       <BadDayModal />
+      <TaskDetailModal />
     </div>
   );
 }
