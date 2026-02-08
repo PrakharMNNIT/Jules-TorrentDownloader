@@ -17,8 +17,8 @@ const config: Config = {
         "neon-glow": "rgba(37, 106, 244, 0.4)"
       },
       fontFamily: {
-        "display": ["Space Grotesk", "sans-serif"],
-        "body": ["Noto Sans", "sans-serif"]
+        "display": ["var(--font-space-grotesk)", "sans-serif"],
+        "body": ["var(--font-noto-sans)", "sans-serif"]
       },
       borderRadius: {
         "lg": "var(--radius)",
