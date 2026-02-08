@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { CheckCircle2, Lock, Loader2 } from "lucide-react";
+import { CheckCircle2, Lock, Loader2, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { type Phase } from "@/lib/store";
+import { type Phase, useStore } from "@/lib/store";
 
 interface PhaseCardProps {
   phase: Phase;
@@ -9,6 +9,7 @@ interface PhaseCardProps {
 }
 
 export function PhaseCard({ phase, index }: PhaseCardProps) {
+  const { adminMode } = useStore();
   const isLocked = phase.status === 'locked';
   const isActive = phase.status === 'active';
   const isDone = phase.status === 'completed';
@@ -25,6 +26,13 @@ export function PhaseCard({ phase, index }: PhaseCardProps) {
         isDone && "cyber-border bg-surface-dark"
       )}
     >
+      {/* Admin Edit Controls */}
+      {adminMode && (
+        <button className="absolute top-2 right-2 p-1.5 rounded bg-black/40 text-slate-400 hover:text-white hover:bg-primary z-20 opacity-0 group-hover:opacity-100 transition-all">
+            <Settings className="w-4 h-4" />
+        </button>
+      )}
+
       {/* Background Effects */}
       {isDone && (
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />

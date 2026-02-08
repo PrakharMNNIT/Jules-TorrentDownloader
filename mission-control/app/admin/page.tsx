@@ -8,15 +8,16 @@ import { BadDayModal } from "@/components/BadDayModal";
 import { TaskDetailModal } from "@/components/TaskDetailModal";
 import { TopNav } from "@/components/layout/TopNav";
 import { ActiveLoadout } from "@/components/sections/ActiveLoadout";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Plus, Calendar, Flag } from "lucide-react";
+import { motion } from "framer-motion";
 
-export default function Dashboard() {
+export default function AdminDashboard() {
   const { phases, setBadDayProtocol, init, setAdminMode } = useStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setAdminMode(false);
+    setAdminMode(true);
     init(); // Hydrate from Supabase (or Mock)
   }, [init, setAdminMode]);
 
@@ -27,23 +28,57 @@ export default function Dashboard() {
       {/* Top Navigation */}
       <TopNav />
 
-      <main className="flex-1 flex flex-col items-center px-4 py-8 md:px-10 lg:px-40">
+      <main className="flex-1 flex flex-col items-center px-4 py-8 md:px-10 lg:px-40 relative">
+
+        {/* Admin Floating Actions (Screen 3) */}
+        <div className="fixed right-8 bottom-8 z-40 group">
+            <div className="absolute bottom-full right-0 mb-4 flex flex-col gap-2 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all pointer-events-none group-hover:pointer-events-auto">
+                <button className="flex items-center gap-3 bg-[#1b212d] border border-[#282e39] text-slate-300 hover:text-white hover:border-primary p-2 pr-4 rounded-full shadow-lg">
+                    <div className="size-8 rounded-full bg-[#282e39] flex items-center justify-center">
+                        <Calendar className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-mono uppercase">Change Week</span>
+                </button>
+                <button className="flex items-center gap-3 bg-[#1b212d] border border-[#282e39] text-slate-300 hover:text-white hover:border-primary p-2 pr-4 rounded-full shadow-lg">
+                    <div className="size-8 rounded-full bg-[#282e39] flex items-center justify-center">
+                        <Flag className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-mono uppercase">End Phase</span>
+                </button>
+            </div>
+            <button className="size-14 rounded-full bg-primary text-white shadow-[0_0_20px_rgba(37,106,244,0.4)] hover:shadow-[0_0_30px_rgba(37,106,244,0.6)] hover:scale-105 transition-all flex items-center justify-center">
+                <Plus className="w-8 h-8" />
+            </button>
+        </div>
+
         <div className="w-full max-w-[1200px] flex flex-col gap-8">
 
           {/* Page Heading & Status */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-[#282e39] pb-6">
             <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2 text-primary text-sm font-bold tracking-widest uppercase">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-                </span>
-                System Online
+              <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 text-primary text-sm font-bold tracking-widest uppercase">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+                    </span>
+                    System Online
+                  </div>
+                  <div className="flex items-center gap-1 text-xs text-orange-400 border border-orange-400/30 bg-orange-400/10 px-2 py-0.5 rounded">
+                    <span className="material-symbols-outlined text-[14px]">admin_panel_settings</span>
+                    EDITING
+                   </div>
               </div>
-              <h1 className="text-white text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em]">PHASE 1: MOBILIZATION</h1>
-              <p className="text-[#9ca6ba] text-base font-normal leading-normal max-w-xl">
-                Current objective: Establish core competencies in low-level memory management and foundational algorithms.
-              </p>
+
+              <div className="group relative inline-block max-w-fit">
+                <h1 className="text-white text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em] border-b-2 border-dashed border-slate-600 pb-1 hover:border-primary cursor-text transition-colors">PHASE 1: MOBILIZATION</h1>
+              </div>
+
+              <div className="group relative max-w-xl">
+                 <p className="text-[#9ca6ba] text-base font-normal leading-normal border border-transparent hover:border-dashed hover:border-slate-600 p-1 -ml-1 rounded cursor-text transition-colors">
+                    Current objective: Establish core competencies in low-level memory management and foundational algorithms.
+                 </p>
+              </div>
             </div>
 
             <div className="flex items-center gap-4 bg-[#1b212d] p-4 rounded-xl border border-[#282e39]">
@@ -79,15 +114,15 @@ export default function Dashboard() {
                 <ActiveLoadout />
 
                 {/* Bad Day Protocol Trigger */}
-                <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-5 relative overflow-hidden">
+                <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-5 relative overflow-hidden group">
                     <div className="absolute -right-6 -top-6 text-red-500/10">
                         <AlertTriangle className="w-[120px] h-[120px]" />
                     </div>
                     <div className="relative z-10 flex flex-col gap-4">
                         <div className="flex justify-between items-start">
                             <div>
-                                <h3 className="text-red-400 font-bold text-lg">BAD DAY PROTOCOL</h3>
-                                <p className="text-red-400/60 text-xs">Switch to low-intensity mode</p>
+                                <h3 className="text-red-400 font-bold text-lg cursor-text hover:underline decoration-dashed">BAD DAY PROTOCOL</h3>
+                                <p className="text-red-400/60 text-xs cursor-text">Switch to low-intensity mode</p>
                             </div>
                             <div className="flex items-center">
                                 <button
@@ -99,7 +134,7 @@ export default function Dashboard() {
                                 </button>
                             </div>
                         </div>
-                        <p className="text-slate-400 text-sm">
+                        <p className="text-slate-400 text-sm border border-transparent hover:border-dashed hover:border-red-500/30 p-1 -m-1 rounded cursor-text">
                             Reduces active tasks to critical items only. Extends deadlines by 24h. Activates soothing UI theme.
                         </p>
                     </div>

@@ -45,16 +45,26 @@ export interface UserStats {
   };
 }
 
+export interface LoadoutItem {
+    id: string;
+    title: string;
+    subtitle: string;
+    icon: string; // lucide icon name
+}
+
 interface MissionState {
   userStats: UserStats;
   phases: Phase[];
   projects: Project[];
   tasks: Task[];
+  loadout: LoadoutItem[];
   selectedTaskId: string | null;
   badDayProtocol: boolean;
+  adminMode: boolean;
 
   // Actions
   init: () => Promise<void>;
+  setAdminMode: (active: boolean) => void;
 
   // Task Management
   setSelectedTask: (id: string | null) => void;
@@ -133,7 +143,13 @@ const MOCK_DATA = {
       estimatedTime: 30,
       tags: ['Pending']
     },
-  ] as Task[]
+  ] as Task[],
+  loadout: [
+    { id: 'l1', title: 'C++', subtitle: 'Core Systems', icon: 'Terminal' },
+    { id: 'l2', title: 'Python', subtitle: 'Scripting', icon: 'Code2' },
+    { id: 'l3', title: 'Git', subtitle: 'Version Ctrl', icon: 'FileCode2' },
+    { id: 'l4', title: 'Docker', subtitle: 'Containers', icon: 'Box' },
+  ] as LoadoutItem[]
 };
 
 export const useStore = create<MissionState>((set, get) => ({
@@ -141,10 +157,13 @@ export const useStore = create<MissionState>((set, get) => ({
   phases: MOCK_DATA.phases,
   projects: MOCK_DATA.projects,
   tasks: MOCK_DATA.tasks,
+  loadout: MOCK_DATA.loadout,
   selectedTaskId: null,
   badDayProtocol: false,
+  adminMode: false,
 
   setSelectedTask: (id) => set({ selectedTaskId: id }),
+  setAdminMode: (active) => set({ adminMode: active }),
 
   init: async () => {
     if (isMockMode()) {

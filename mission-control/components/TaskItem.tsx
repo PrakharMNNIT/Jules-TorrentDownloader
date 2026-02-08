@@ -1,6 +1,6 @@
 import { type Task, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
-import { Check, Lock } from "lucide-react";
+import { Check, Lock, Edit, Trash2, GripVertical } from "lucide-react";
 
 interface TaskItemProps {
   task: Task;
@@ -9,7 +9,7 @@ interface TaskItemProps {
 }
 
 export function TaskItem({ task, onToggle, isBlocked = false }: TaskItemProps) {
-  const { setSelectedTask } = useStore();
+  const { setSelectedTask, adminMode } = useStore();
   const isCompleted = task.status === 'completed';
   const isInProgress = task.status === 'in_progress';
   const isPending = task.status === 'pending';
@@ -20,6 +20,13 @@ export function TaskItem({ task, onToggle, isBlocked = false }: TaskItemProps) {
       isInProgress ? "bg-primary/5 hover:bg-primary/10" : "hover:bg-surface-hover",
       isBlocked && "opacity-50 cursor-not-allowed bg-red-500/5"
     )}>
+      {/* Drag Handle */}
+      {adminMode && (
+          <div className="absolute left-2 top-1/2 -translate-y-1/2 cursor-grab text-slate-600 hover:text-white">
+             <GripVertical className="w-4 h-4" />
+          </div>
+      )}
+
       {/* Blocked Overlay */}
       {isBlocked && (
         <div className="absolute top-2 right-2 text-red-500 flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider border border-red-500/20 bg-red-500/10 px-2 py-0.5 rounded pointer-events-none">
@@ -29,7 +36,11 @@ export function TaskItem({ task, onToggle, isBlocked = false }: TaskItemProps) {
 
       {/* Checkbox */}
       <div
-        className={cn("relative flex items-start pt-0.5 cursor-pointer", isBlocked && "pointer-events-none")}
+        className={cn(
+            "relative flex items-start pt-0.5 cursor-pointer transition-transform",
+            isBlocked && "pointer-events-none",
+            adminMode && "translate-x-6"
+        )}
         onClick={(e) => {
             e.stopPropagation();
             if (!isBlocked) onToggle(task.id);
@@ -59,13 +70,14 @@ export function TaskItem({ task, onToggle, isBlocked = false }: TaskItemProps) {
         <div className="flex justify-between w-full items-start">
           <p className={cn(
             "text-base font-medium leading-normal transition-colors",
-            isCompleted ? "text-slate-400 line-through group-hover:text-slate-300" : "text-white"
+            isCompleted ? "text-slate-400 line-through group-hover:text-slate-300" : "text-white",
+            adminMode && "border-b border-dashed border-slate-600 hover:border-primary cursor-text"
           )}>
             {task.title}
           </p>
 
           {/* Tags */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             {isCompleted && (
                  <span className="text-[10px] font-mono uppercase text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                     Done
@@ -81,11 +93,26 @@ export function TaskItem({ task, onToggle, isBlocked = false }: TaskItemProps) {
                     Pending
                 </span>
             )}
+
+            {/* Admin Actions */}
+            {adminMode && (
+                <div className="flex gap-1 border-l border-[#3b4354] pl-2 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button className="text-slate-400 hover:text-white transition-colors p-1">
+                        <Edit className="w-4 h-4" />
+                    </button>
+                    <button className="text-slate-400 hover:text-red-400 transition-colors p-1">
+                        <Trash2 className="w-4 h-4" />
+                    </button>
+                </div>
+            )}
           </div>
         </div>
 
         {task.description && (
-          <p className="text-slate-400 text-sm mt-1 group-hover:text-slate-300 transition-colors">
+          <p className={cn(
+              "text-slate-400 text-sm mt-1 group-hover:text-slate-300 transition-colors",
+              adminMode && "border border-transparent hover:border-dashed hover:border-slate-600 p-0.5 -m-0.5 rounded cursor-text"
+          )}>
             {task.description}
           </p>
         )}

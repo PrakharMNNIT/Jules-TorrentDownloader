@@ -1,12 +1,12 @@
 import { useStore, type Project, type Task } from "@/lib/store";
 import { TaskItem } from "./TaskItem";
-import { ListTodo, ChevronRight, FolderOpen, Folder } from "lucide-react";
+import { ListTodo, ChevronRight, FolderOpen, Folder, Plus, PlusCircle, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function WeeklyBattlePlan() {
-  const { tasks, projects, toggleTask } = useStore();
+  const { tasks, projects, toggleTask, adminMode } = useStore();
 
   // Helper to build hierarchy
   const getProjectTasks = (projectId: string) => tasks.filter(t => t.projectId === projectId);
@@ -21,8 +21,20 @@ export function WeeklyBattlePlan() {
           <ListTodo className="text-primary w-6 h-6" />
           WEEKLY BATTLE PLAN
         </h2>
-        <div className="text-xs font-mono text-primary bg-primary/10 px-3 py-1 rounded border border-primary/20">
-            WEEK 1
+
+        <div className="flex items-center gap-2">
+            {adminMode && (
+                <button className="text-xs font-mono text-white bg-primary hover:bg-blue-600 px-3 py-1 rounded transition-colors flex items-center gap-1">
+                    <Plus className="w-3.5 h-3.5" /> ADD TASK
+                </button>
+            )}
+            <div className={cn(
+                "text-xs font-mono text-primary bg-primary/10 px-3 py-1 rounded border border-primary/20 flex items-center gap-1",
+                adminMode && "hover:border-primary/50 cursor-pointer"
+            )}>
+                WEEK 1
+                {adminMode && <ChevronDown className="w-3 h-3" />}
+            </div>
         </div>
       </div>
 
@@ -51,6 +63,16 @@ export function WeeklyBattlePlan() {
                     });
                     return <TaskItem key={task.id} task={task} onToggle={toggleTask} isBlocked={isBlocked} />
                  })}
+            </div>
+        )}
+
+        {/* Admin Add Task Placeholder */}
+        {adminMode && (
+             <div className="edit-border p-4 m-2 rounded-lg flex items-center justify-center cursor-pointer group border border-dashed border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors">
+                <span className="text-primary/70 group-hover:text-primary font-mono text-sm flex items-center gap-2">
+                    <PlusCircle className="w-4 h-4" />
+                    Click to add new task...
+                </span>
             </div>
         )}
       </div>
