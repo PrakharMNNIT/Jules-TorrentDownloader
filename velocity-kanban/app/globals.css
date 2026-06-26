@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* LIGHT MODE: "Clean Room" - Clinical, High Contrast, Technical */
+    --vk-bg: #F0F4F8;
+    --vk-surface: #FFFFFF;
+    --vk-surface-hover: #F8FAFC;
+    --vk-border: #CBD5E1;
+    --vk-primary: #0D9488; /* Teal */
+    --vk-secondary: #0F172A; /* Slate 900 */
+    --vk-accent: #F97316; /* Orange */
+    --vk-text: #0F172A;
+    --vk-text-muted: #64748B;
+    --vk-success: #10B981;
+    --vk-warning: #F59E0B;
+    --vk-danger: #EF4444;
+
+    --noise-opacity: 0.03;
+  }
+
+  .dark {
+    /* DARK MODE: "Pit Lane Night" - Neon, Deep, Glowing */
+    --vk-bg: #020408; /* Near Black */
+    --vk-surface: #0F172A; /* Dark Slate */
+    --vk-surface-hover: #1E293B;
+    --vk-border: #1E293B;
+    --vk-primary: #14B8A6; /* Bright Teal */
+    --vk-secondary: #E2E8F0;
+    --vk-accent: #FB923C; /* Bright Orange */
+    --vk-text: #F8FAFC;
+    --vk-text-muted: #94A3B8;
+    --vk-success: #34D399;
+    --vk-warning: #FBBF24;
+    --vk-danger: #F87171;
+
+    --noise-opacity: 0.05;
+  }
+}
+
+body {
+  background-color: var(--vk-bg);
+  color: var(--vk-text);
+  font-family: 'Fira Sans', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Background Texture */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+  opacity: var(--noise-opacity);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--vk-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vk-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Fira Code', monospace;
+}
+
+/* Utility classes for Glassmorphism */
+.glass-panel {
+  background: rgba(var(--vk-surface), 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--vk-border);
+}
+
+.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.6); /* Darker glass */
+  border-color: rgba(255, 255, 255, 0.1);
+}

@@ -1,0 +1,3 @@
+Navigating to dashboard...
+Dashboard loaded successfully.
+Screenshot saved to /home/jules/verification/dashboard.png
